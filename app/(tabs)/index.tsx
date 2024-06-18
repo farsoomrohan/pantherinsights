@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginRight: 10,
     marginTop: 75, 
+    color: 'white',
   },
   professorImage: {
     width: '85%', // Adjust size as needed

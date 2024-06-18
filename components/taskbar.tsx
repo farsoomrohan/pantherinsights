@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Link } from 'expo-router';
 
 const Toolbar = () => {
+
   return (
     <View style={styles.toolbar}>
       <Image
@@ -10,12 +12,16 @@ const Toolbar = () => {
         style={styles.profilePicture}
       />
       <View style={styles.rightContainer}>
-        <TouchableOpacity onPress={() => alert('Login')}>
+        <Link href={"/screens/login"} asChild>
+        <Pressable>
           <Text style={styles.link}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert('Signup')}>
-          <Text style={styles.link}>Signup</Text>
-        </TouchableOpacity>
+        </Pressable>
+        </Link>
+       <Link href={"/screens/register"} asChild>
+        <Pressable>
+          <Text style={styles.link}>Sign up</Text>
+        </Pressable>
+        </Link>
         <TouchableOpacity onPress={() => alert('More options')}>
           <Icon name="more-vert" size={24} color="black" />
         </TouchableOpacity>
