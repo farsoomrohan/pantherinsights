@@ -12,6 +12,8 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarStyle: { backgroundColor: '#1E40AF' },
+
         headerShown: false,
       }}>
       <Tabs.Screen
@@ -24,11 +26,38 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="forumPage"
         options={{
-          title: 'Explore',
+          title: 'Communities',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'school' : 'school-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="searchPage"
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="messagePage"
+        options={{
+          title: 'Messages',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'mail' : 'mail-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profilePage"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
         }}
       />

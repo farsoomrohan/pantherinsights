@@ -38,4 +38,4 @@ isSupported().then((supported) => {
 
 // Initialize Firebase
 export const db = firestore;
-export {app, auth};
+export {app, auth };

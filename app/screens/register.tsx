@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { auth } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { addWhitelistedNativeProps } from 'react-native-reanimated/lib/typescript/ConfigHelper';
+
+// Register screen for app handles firebase authentication
+// routes back to login page
 
 const Register = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const auth = FIREBASE_AUTH;
+  const FirebaseAuth = auth;
 
+  // Method to create user in firebase later used for authentication
   const signUp = async () => {
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Passwords do not match');
@@ -25,6 +30,7 @@ const Register = () => {
     }
   };
 
+  // three text inputs for user paramaters
   return (
     <GestureHandlerRootView>
     <View style={styles.container}>
@@ -75,6 +81,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+    color: "white",
   },
 });
 

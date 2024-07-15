@@ -1,20 +1,24 @@
 import { View, Text, StyleSheet, Button, TouchableOpacity} from "react-native";
 import React, {useState} from "react";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { auth }  from "@/FirebaseConfig";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import { LoginScreenNavigationProp } from "../navigation";
 import { Link } from "expo-router";
 
+// Login page for app handles firebase authentication and routes to home screen and register screen
+// FUTURE NOTE* add more complex password constraints later
+
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
     const navigation = useNavigation<LoginScreenNavigationProp>();
 
-
+    // SignIn method that passes search inputs and firebase auth
+    // navigates to home screen after
     const signIn = async () => {
         setLoading(true);
         try {
