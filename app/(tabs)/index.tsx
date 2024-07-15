@@ -4,6 +4,7 @@ import React from 'react';
 import Toolbar from '../../components/taskbar';
 import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
 import Carousel from '../../components/Carousel';
+import ReviewCard from '@/components/ReviewCard';
 
 export default function HomeScreen() {
   const [search, setSearch] = React.useState('');

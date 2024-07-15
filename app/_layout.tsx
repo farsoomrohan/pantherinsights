@@ -6,9 +6,9 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import Login from './screens/login';
 
-
 import { useColorScheme } from '@/hooks/useColorScheme';
 import TabLayout from './(tabs)/_layout';
+// i
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
