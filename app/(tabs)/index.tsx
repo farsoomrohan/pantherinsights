@@ -3,11 +3,12 @@ import React from 'react';
 
 import Toolbar from '../../components/taskbar';
 import { GestureHandlerRootView, ScrollView, TextInput } from 'react-native-gesture-handler';
-import Carousel from '../../components/Carousel';
 import { LinearGradient } from 'expo-linear-gradient'
 import { ScreenHeight, ScreenWidth } from 'react-native-elements/dist/helpers';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ReviewCard from '@/components/ReviewCard';
+import Footer from '@/components/footer';
+import Carousel from '@/components/Carousel';
 
 
 
@@ -23,6 +24,8 @@ const images = [
  
   // Add more image URLs as needed
 ];
+  const SLIDE_COUNT = 5;
+  const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
@@ -62,7 +65,7 @@ style
       <Text style = {styles.homeText}>Trending Profesors</Text>
 
       <View style={styles.space2}></View>
-      <Carousel images={images}/>
+      <Carousel slides={images}/>
 
       <View style={styles.space1}></View>
       <Text style = {styles.homeText}>Trending Posts</Text>
@@ -92,7 +95,10 @@ style
         likes={43}
         comments={33}
       />
-    
+
+    <View style={styles.space1}></View>
+    <Footer/>
+
     </ScrollView>
     </SafeAreaView>
     </GestureHandlerRootView>

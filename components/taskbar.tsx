@@ -15,15 +15,15 @@ const Toolbar = () => {
       <Text style = {styles.titleText}> Panther Insights</Text>
       <View style={styles.rightContainer}>
         <Link href={"/screens/login"} asChild>
-          <Button
-            title='Login'
-          />
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable>
         </Link>
         <View style={styles.space} /> 
        <Link href={"/screens/register"} asChild>
-        <Button 
-          title="Sign Up"
-        />
+        <Pressable style={styles.button2}>
+            <Text style={styles.buttonText2}>Sign Up</Text>
+          </Pressable>
         </Link>
       </View>
     </View>
@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#000000',
     elevation: 4,
+    position: 'absolute',  // Make the toolbar sticky
+    top: 0,               
+    left: 0,               
+    right: 0,             
+    zIndex: 1000, 
   },
   profilePicture: {
     width: 40,
@@ -63,7 +68,35 @@ const styles = StyleSheet.create({
   },
   space: {
     width: 6
-  }
+  },
+
+  buttonText: {
+    color: '#2563EB', // White text color
+    fontSize: 13,
+    fontWeight: 'bold',
+  },
+
+  button: {
+    backgroundColor: '#fff', // Fill color for the rectangle
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+  },
+
+  buttonText2: {
+    color: '#fff', // White text color
+    fontSize: 13,
+    fontWeight: 'bold',
+  },
+
+  button2: {
+    backgroundColor: '#2563EB', // Fill color for the rectangle
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+  },
+
+
 });
 
 export default Toolbar;
