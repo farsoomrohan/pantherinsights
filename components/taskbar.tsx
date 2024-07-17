@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Link } from 'expo-router';
-import { Button } from 'react-native-elements';
+import { useRouter } from 'expo-router';
+
 
 const Toolbar = () => {
+
+  const router = useRouter();
 
   return (
     <View style={styles.toolbar}>
@@ -14,17 +16,13 @@ const Toolbar = () => {
       />
       <Text style = {styles.titleText}> Panther Insights</Text>
       <View style={styles.rightContainer}>
-        <Link href={"/screens/login"} asChild>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-          </Pressable>
-        </Link>
+      <Pressable style={styles.button} onPress={() => router.push('/screens/login')}>
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
         <View style={styles.space} /> 
-       <Link href={"/screens/register"} asChild>
-        <Pressable style={styles.button2}>
-            <Text style={styles.buttonText2}>Sign Up</Text>
-          </Pressable>
-        </Link>
+      <Pressable style={styles.button2} onPress={() => router.push('/screens/register')}>
+          <Text style={styles.buttonText2}>Sign Up</Text>
+      </Pressable>
       </View>
     </View>
   );

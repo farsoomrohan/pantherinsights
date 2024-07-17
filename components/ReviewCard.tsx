@@ -27,8 +27,17 @@ const getLetterGrade = (percentage: number): string => {
   return 'F';
 };
 
+const getLetterGradeColor = (rating: number): string => {
+    if (rating >= 90) return '#008000'; // dark green
+    if (rating >= 70) return '#84EAB3'; // light green
+    if (rating >= 60) return '#FFD700'; // Yellow
+    
+    return '#FF0000'; //red
+};
+
 const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, rating, reviewText, likes, comments}) => {
   const letterGrade = getLetterGrade(rating);
+  const letterGradeColor = getLetterGradeColor(rating);
 
   return (
        <View style={styles.card}>
@@ -36,9 +45,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
         <Text style={styles.reviewerName}>{reviewerName}</Text>
         <Text style={styles.date}>{reviewDate}</Text>
       </View>
+
       <View style={styles.ratingContainer}>
-        <Text style={styles.ratingText}>Rating:</Text>
-        <Text style={styles.ratingValue}>{letterGrade}</Text>
+        <View style={[styles.ratingBox, { backgroundColor: '#333' }]}>
+          <Text style={[styles.ratingValue, { color: letterGradeColor }]}>{letterGrade}</Text>
+        </View>
       </View>
       <Text style={styles.reviewText}>{reviewText}</Text>
          <View style={styles.footer}>
@@ -47,7 +58,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
           <Text style={styles.iconText}>{likes}</Text>
         </View>
         <View style={styles.iconContainer}>
-          <Icon name="comment" size={20} color="#333" />
+          <Icon name="comment" size={20} color="#fff" />
           <Text style={styles.iconText}>{comments}</Text>
         </View>
       </View>
@@ -57,7 +68,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
 
 const styles = StyleSheet.create({
  card: {
-    backgroundColor: 'white',
+    backgroundColor: '#202020',
     borderRadius: 8,
     padding: 12,
     marginVertical: 10,
@@ -75,6 +86,7 @@ const styles = StyleSheet.create({
   reviewerName: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#2563EB'
   },
   date: {
     fontSize: 14,
@@ -84,18 +96,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 8,
   },
+  ratingBox: {
+    backgroundColor: '#333',
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+  },
   ratingText: {
     fontSize: 14,
     fontWeight: 'bold',
     marginRight: 4,
+    color: '#2563EB',
   },
   ratingValue: {
-    fontSize: 14,
-    color: '#333',
+    fontSize: 24,
   },
   reviewText: {
     fontSize: 14,
-    color: '#333',
+    color: '#fff',
   },
 
   footer: {
@@ -113,7 +133,7 @@ const styles = StyleSheet.create({
   iconText: {
     marginLeft: 4,
     fontSize: 14,
-    color: '#333',
+    color: '#fff',
   },
 
 

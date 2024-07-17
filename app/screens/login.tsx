@@ -3,9 +3,9 @@ import React, {useState} from "react";
 import { auth }  from "@/FirebaseConfig";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigation } from '@react-navigation/native';
-import { LoginScreenNavigationProp } from "../navigation";
 import { Link } from "expo-router";
+import { useRouter } from "expo-router";
+
 
 // Login page for app handles firebase authentication and routes to home screen and register screen
 // FUTURE NOTE* add more complex password constraints later
@@ -15,23 +15,23 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigation = useNavigation<LoginScreenNavigationProp>();
+    const router = useRouter();
 
     // SignIn method that passes search inputs and firebase auth
     // navigates to home screen after
     const signIn = async () => {
         setLoading(true);
         try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
-            navigation.navigate('Tabs');
-            console.log(response);
+ /*          const response = await signInWithEmailAndPassword(auth, email, password); */
+            router.replace("/tabs");
+            console.log('sign in');
 
         } catch(error: any) {
             console.log(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
     
     return (
         <GestureHandlerRootView>
@@ -44,13 +44,11 @@ const Login = () => {
             </Link>
         </View>
         </GestureHandlerRootView>
- 
     );
 
 
 
 };
-export default Login;
 
 const styles = StyleSheet.create({
 input: {
@@ -59,7 +57,7 @@ input: {
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
-    color: 'white'
+    color: '#fff'
   },
   link: {
     color: 'blue',
@@ -72,3 +70,6 @@ input: {
     paddingHorizontal: 16,
   },
 });
+
+export default Login;
+

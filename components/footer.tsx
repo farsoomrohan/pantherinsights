@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         </View>
         <Text style={styles.text}>© 2024 Georgia State University</Text>
         <View style={styles.socialContainer}>
-          <TouchableOpacity onPress={() => Linking.openURL('https://twitter.com/yourprofile')}>
+          <TouchableOpacity onPress={() => Linking.openURL('https://twitter.com')}>
             <Image source={require('../assets/icons/twitter.png')} style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com/panther.insight?igsh=eGRkNzA1cnRzZmIw&utm_source=qr')}>

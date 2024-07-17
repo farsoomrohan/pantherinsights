@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, StatusBar, View, Image, Text, ImageBackground, Dimensions, Pressable} from 'react-native';
+import { SafeAreaView, StyleSheet, StatusBar, View, Image, Text, ImageBackground, Dimensions, Pressable, Platform} from 'react-native';
 import React from 'react';
 
 import Toolbar from '../../components/taskbar';
@@ -10,7 +10,7 @@ import ReviewCard from '@/components/ReviewCard';
 import Footer from '@/components/footer';
 import Carousel from '@/components/Carousel';
 
-
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : StatusBar.currentHeight;
 
 export default function HomeScreen() {
   const [search, setSearch] = React.useState('');
@@ -30,11 +30,13 @@ const images = [
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
     <SafeAreaView style={styles.container}>
+      <View style={styles.statusBar} />
+      <StatusBar barStyle="light-content" />
     <ScrollView>
-    <StatusBar barStyle="light-content" />
      <Toolbar />
       <View style={styles.contentContainer}>
         <ImageBackground source={require('../../assets/images/gsu.jpeg')} style={styles.imgBackground} resizeMode='stretch'>
+
          <LinearGradient
           colors={["#09203f", "#537895"]}
           start={[0.0, 0.0]}
@@ -82,7 +84,7 @@ style
       <ReviewCard 
         reviewDate='June 15, 2024' 
         reviewerName='Sebastian'  
-        rating={78}
+        rating={50}
         reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
         likes={11}
         comments={33}
@@ -136,7 +138,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 388,
     height: 92,
-    marginTop: -400
+    marginTop: -300
   },
   space1: {
     height: 50
@@ -201,6 +202,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "left",
     width: 227,
-    height: 32
-  }
+    height: 32,
+    marginLeft: 10,
+  },
+   statusBar: {
+    height: STATUSBAR_HEIGHT,
+    backgroundColor: '#000000', // Match this with your Toolbar background color
+  },
 });
