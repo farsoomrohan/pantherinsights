@@ -4,12 +4,14 @@ import React from 'react';
 import Toolbar from '../../components/taskbar';
 import { GestureHandlerRootView, ScrollView, TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient'
-import { ScreenHeight, ScreenWidth } from 'react-native-elements/dist/helpers';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ReviewCard from '@/components/ReviewCard';
 import Footer from '@/components/footer';
 import Carousel from '@/components/Carousel';
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScaling';
 
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : StatusBar.currentHeight;
 
 export default function HomeScreen() {
@@ -117,22 +119,22 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: '#fff', // White color for text
-    fontSize: 20,
+    fontSize: scaleFont(20),
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: scaleHeight(10),
   },
    rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: scaleHeight(10),
   },
   imageContainer: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    marginRight: 20,
-    marginTop: 50,
+    marginRight: scaleWidth(20),
+    marginTop: scaleHeight(50),
   },
   contentContainer: {
     flex: 1,
@@ -142,9 +144,9 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: scaleHeight(20),
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: scaleWidth(20),
     paddingHorizontal: 10,
     width: '85%',
     height: 50,
@@ -155,55 +157,55 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   searchIcon: {
-    marginLeft: 10,
+    marginLeft: scaleWidth(10),
   },
   professorImage: {
     width: '85%', // Adjust size as needed
     aspectRatio: 1,
-    borderRadius: 150, // This makes the image circular
+    borderRadius: scaleBoth(150), // This makes the image circular
   },
   imgBackground: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height -100,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT - scaleHeight(155),
     alignItems: "center",
     
   },
   linearGradient: {
-    width: ScreenWidth,
-    height: Dimensions.get('window').height -100,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT - scaleHeight(155),
     opacity: 0.75,
     justifyContent: 'center',
     alignItems: 'center'
   },
   homeTitle: {
-    fontSize: 24,
-    lineHeight: 30,
+    fontSize: scaleFont(24),
+    lineHeight: scaleHeight(30),
     fontWeight: "700",
     fontFamily: "Roboto-Bold",
     color: "#fff",
     textAlign: "center",
-    width: 388,
-    height: 92,
-    marginTop: -300
+    width: scaleWidth(388),
+    height: scaleHeight(92),
+    marginTop: scaleHeight(-300)
   },
   space1: {
-    height: 50
+    height: scaleHeight(50)
   },
   space2: {
-    height: 20
+    height: scaleHeight(20)
   },
  
   homeText: {
-    fontSize: 24,
-    lineHeight: 32,
+    fontSize: scaleFont(24),
+    lineHeight: scaleHeight(32),
     fontWeight: "700",
     fontFamily: "Roboto-Bold",
     color: "#fff",
     textAlign: "left",
-    width: 227,
-    height: 32,
-    marginLeft: 10,
+    width: scaleWidth(227),
+    height: scaleHeight(32),
+    marginLeft: scaleWidth(10),
   },
    statusBar: {
     height: STATUSBAR_HEIGHT,

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Assuming FontAwesome icons are used
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScaling';
 
 const ProfileScreen: React.FC = () => {
   // Replace with actual user data
@@ -55,27 +56,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#282627',
-    padding: 20,
+    padding: scaleBoth(20),
   },
   space: {
-    height: 100,
+    height: scaleHeight(100),
   },
   userContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: scaleHeight(20),
   },
   userImageContainer: {
-    marginBottom: 10,
+    marginBottom: scaleHeight(10),
   },
   userImage: {
-    width: 100, // Adjust width and height as needed
-    height: 100,
-    borderRadius: 50, // Make it circular
+    width: scaleWidth(100), // Adjust width and height as needed
+    height: scaleHeight(100),
+    borderRadius: scaleBoth(50), // Make it circular
   },
   userName: {
-    fontSize: 24,
+    fontSize: scaleFont(24),
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: scaleHeight(10),
     color: '#fff'
   },
   optionsContainer: {
@@ -85,13 +86,13 @@ const styles = StyleSheet.create({
   option: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
+    paddingVertical: scaleHeight(12),
+    borderBottomWidth: scaleHeight(1),
     borderBottomColor: '#ccc',
   },
   optionText: {
-    marginLeft: 20,
-    fontSize: 18,
+    marginLeft: scaleWidth(20),
+    fontSize: scaleFont(18),
     color: '#fff',
   },
 });

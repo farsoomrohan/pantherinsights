@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../app/responsiveScaling';
 
 interface ReviewCardProps {
   reviewerName: string;
@@ -69,11 +69,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
 const styles = StyleSheet.create({
  card: {
     backgroundColor: '#202020',
-    borderRadius: 8,
-    padding: 12,
-    marginVertical: 10,
+    borderRadius: scaleBoth(8),
+    padding: scaleBoth(12),
+    marginVertical: scaleHeight(10),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: scaleWidth(0), height: scaleHeight(2) },
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
@@ -81,40 +81,40 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: scaleHeight(8),
   },
   reviewerName: {
-    fontSize: 16,
+    fontSize: scaleFont(16),
     fontWeight: 'bold',
     color: '#2563EB'
   },
   date: {
-    fontSize: 14,
+    fontSize: scaleFont(14),
     color: 'gray',
   },
   ratingContainer: {
     flexDirection: 'row',
-    marginBottom: 8,
+    marginBottom: scaleHeight(8),
   },
   ratingBox: {
     backgroundColor: '#333',
-    width: 60,
-    height: 60,
+    width: scaleWidth(60),
+    height: scaleHeight(60),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 4,
+    borderRadius: scaleBoth(4),
   },
   ratingText: {
-    fontSize: 14,
+    fontSize: scaleFont(14),
     fontWeight: 'bold',
     marginRight: 4,
     color: '#2563EB',
   },
   ratingValue: {
-    fontSize: 24,
+    fontSize: scaleFont(24),
   },
   reviewText: {
-    fontSize: 14,
+    fontSize: scaleFont(14),
     color: '#fff',
   },
 
@@ -122,17 +122,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: scaleHeight(12),
   },
 
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 10,
+    marginLeft: scaleWidth(10),
   },
   iconText: {
-    marginLeft: 4,
-    fontSize: 14,
+    marginLeft: scaleWidth(4),
+    fontSize: scaleFont(14),
     color: '#fff',
   },
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native';
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../app/responsiveScaling';
 
 const Footer: React.FC = () => {
 
@@ -30,7 +31,7 @@ const Footer: React.FC = () => {
 const styles = StyleSheet.create({
   footer: {
     backgroundColor: '#282627',
-    paddingVertical: 20,
+    paddingVertical: scaleHeight(20),
   },
   container: {
     flexDirection: 'column',
@@ -41,29 +42,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 32,
-    height: 32,
+    width: scaleWidth(32),
+    height: scaleHeight(32),
   },
   title: {
-    marginLeft: 10,
-    fontSize: 18,
+    marginLeft: scaleWidth(10),
+    fontSize: scaleFont(18),
     fontWeight: 'bold',
     color: '#4a4a4a',
   },
   text: {
-    marginTop: 10,
-    fontSize: 14,
+    marginTop: scaleHeight(10),
+    fontSize: scaleFont(14),
     color: '#9a9a9a',
     textAlign: 'center',
   },
   socialContainer: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: scaleHeight(10),
   },
   icon: {
-    width: 24,
-    height: 24,
-    marginHorizontal: 8,
+    width: scaleWidth(24),
+    height: scaleHeight(24),
+    marginHorizontal: scaleWidth(8),
   },
 });
 

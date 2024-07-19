@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert, Image} from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScaling';
 
 // Register screen for app handles firebase authentication
 // routes back to login page
@@ -17,6 +18,7 @@ const Register = () => {
       Alert.alert('Error', 'Passwords do not match');
       return;
     }
+// firebase call commented out to work with expo go
 
 /*    try { const response = await createUserWithEmailAndPassword(auth, email, password); Alert.alert('Registration Success'); } catch (error) { Alert.alert('Registration Error'); console.log(error); } }; */
 }
@@ -25,6 +27,7 @@ const Register = () => {
   return (
     <GestureHandlerRootView>
     <View style={styles.container}>
+      <Image source={require('../../assets/images/logo.png')} style={styles.userImage}/>
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
@@ -59,22 +62,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 16,
+  paddingHorizontal: scaleWidth(16),
   },
   title: {
-    fontSize: 24,
+    fontSize: scaleFont(24),
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: scaleHeight(24),
   },
   input: {
-    height: 40,
+    height: scaleHeight(40),
     borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
+    borderWidth: scaleBoth(1),
+    marginBottom: scaleHeight(12),
+    paddingHorizontal: scaleWidth(8),
     color: "white",
   },
+  userImage: {
+    width: scaleWidth(100), // Adjust width and height as needed
+    height: scaleHeight(100),
+    borderRadius: scaleBoth(50), // Make it circular
+  },
+
 });
 
 export default Register;

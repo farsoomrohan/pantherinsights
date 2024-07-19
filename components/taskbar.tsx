@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { useRouter } from 'expo-router';
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../app/responsiveScaling';
 
 
 const Toolbar = () => {
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    padding: scaleBoth(10),
     backgroundColor: '#000000',
     elevation: 4,
     position: 'absolute',  // Make the toolbar sticky
@@ -43,9 +44,9 @@ const styles = StyleSheet.create({
     zIndex: 1000, 
   },
   profilePicture: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: scaleWidth(40),
+    height: scaleHeight(40),
+    borderRadius: scaleBoth(20),
   },
   rightContainer: {
     flexDirection: 'row',
@@ -53,45 +54,45 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   link: {
-    marginHorizontal: 10,
-    fontSize: 16,
+    marginHorizontal: scaleHeight(10),
+    fontSize: scaleFont(16),
     color: '#2563EB',
   },
   titleText: {
     color: '#fff', // White color for text
-    fontSize: 20,
+    fontSize: scaleFont(20),
     fontWeight: 'bold',
     fontFamily: 'Roboto',
-    marginRight: 35,
+    marginRight: scaleWidth(35),
   },
   space: {
-    width: 6
+    width: scaleWidth(6)
   },
 
   buttonText: {
     color: '#2563EB', // White text color
-    fontSize: 13,
+    fontSize: scaleFont(13),
     fontWeight: 'bold',
   },
 
   button: {
     backgroundColor: '#fff', // Fill color for the rectangle
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 4,
+    paddingVertical: scaleHeight(8),
+    paddingHorizontal: scaleWidth(12),
+    borderRadius: scaleBoth(4),
   },
 
   buttonText2: {
     color: '#fff', // White text color
-    fontSize: 13,
+    fontSize: scaleFont(13),
     fontWeight: 'bold',
   },
 
   button2: {
     backgroundColor: '#2563EB', // Fill color for the rectangle
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 4,
+    paddingVertical: scaleHeight(8),
+    paddingHorizontal: scaleWidth(12),
+    borderRadius: scaleBoth(4),
   },
 
 

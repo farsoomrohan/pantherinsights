@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../app/responsiveScaling';
 
 type PropType = {
   slides: string[];
@@ -74,33 +75,33 @@ const styles = StyleSheet.create({
   emblaSlide: {
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 5,
+    margin: scaleBoth(5),
     backgroundColor: '#ddd',
-    height: 300,
-    width: 150,
+    height: scaleHeight(300),
+    width: scaleWidth(150),
   },
   emblaSlideNumber: {
-    fontSize: 24,
+    fontSize: scaleFont(24),
   },
   emblaControls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    padding: 10,
+    padding: scaleBoth(10),
   },
   controlText: {
-    fontSize: 18,
+    fontSize: scaleFont(18),
     color: '#fff',
   },
   emblaDots: {
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 10,
+    padding: scaleBoth(10),
     color: '#fff',
   },
   dot: {
-    fontSize: 24,
-    marginHorizontal: 5,
+    fontSize: scaleFont(24),
+    marginHorizontal: scaleWidth(5),
     color: '#fff',
   },
 });
