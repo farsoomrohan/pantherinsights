@@ -53,12 +53,12 @@ style
                   <TextInput
                     style={styles.searchBar}
                     placeholder="Search Professors..."
-                    placeholderTextColor="#ddd"
+                    placeholderTextColor="grey"
                     value={search}
                     onChangeText={setSearch}
                   />
                  <Pressable onPress={() => {console.log('search')}}>
-                  <Icon name="search" size={20} color="#ddd" style={styles.searchIcon} />
+                  <Icon name="search" size={20} color="#000" style={styles.searchIcon} />
                  </Pressable>
                 </View>
         
@@ -81,7 +81,12 @@ style
         rating={98}
         reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
         likes={22}
-        comments={3}
+        comments={[]}
+        grade='A'
+        feedback={5}
+        organization={5}
+        availability={4}
+        engagement={3}
       />
       <ReviewCard 
         reviewDate='June 15, 2024' 
@@ -89,7 +94,12 @@ style
         rating={50}
         reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
         likes={11}
-        comments={33}
+        comments={[]}
+        grade='A'
+        feedback={5}
+        organization={5}
+        availability={4}
+        engagement={3}
       />
       <ReviewCard 
         reviewDate='June 15, 2024' 
@@ -97,7 +107,12 @@ style
         rating={88}
         reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
         likes={43}
-        comments={33}
+        comments={[]}
+        grade='A'
+        feedback={5}
+        organization={5}
+        availability={4}
+        engagement={3}
       />
 
     <View style={styles.space1}></View>

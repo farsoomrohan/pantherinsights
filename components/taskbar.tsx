@@ -17,12 +17,8 @@ const Toolbar = () => {
       />
       <Text style = {styles.titleText}> Panther Insights</Text>
       <View style={styles.rightContainer}>
-      <Pressable style={styles.button} onPress={() => router.push('/screens/login')}>
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
-        <View style={styles.space} /> 
-      <Pressable style={styles.button2} onPress={() => router.push('/screens/register')}>
-          <Text style={styles.buttonText2}>Sign Up</Text>
+      <Pressable style={styles.button} onPress={() => router.push('../Login')}>
+        <Text style={styles.buttonText}>Sign Out</Text>
       </Pressable>
       </View>
     </View>
@@ -63,7 +59,7 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(20),
     fontWeight: 'bold',
     fontFamily: 'Roboto',
-    marginRight: scaleWidth(35),
+    marginRight: scaleWidth(100),
   },
   space: {
     width: scaleWidth(6)
@@ -82,18 +78,6 @@ const styles = StyleSheet.create({
     borderRadius: scaleBoth(4),
   },
 
-  buttonText2: {
-    color: '#fff', // White text color
-    fontSize: scaleFont(13),
-    fontWeight: 'bold',
-  },
-
-  button2: {
-    backgroundColor: '#2563EB', // Fill color for the rectangle
-    paddingVertical: scaleHeight(8),
-    paddingHorizontal: scaleWidth(12),
-    borderRadius: scaleBoth(4),
-  },
 
 
 });

@@ -14,4 +14,4 @@ export type TabsScreenNavigationProp = StackNavigationProp<RootStackParamList, '
 
 export type LoginScreenRouteProp = RouteProp<RootStackParamList, 'Login'>;
 export type RegisterScreenRouteProp = RouteProp<RootStackParamList, 'Register'>;
-export type TabsScreenRouteProp = RouteProp<RootStackParamList, '(tabs)'>;
+export type TabsScreenRouteProp = RouteProp<RootStackParamList, '(tabs) '>;

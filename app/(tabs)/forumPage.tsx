@@ -8,30 +8,7 @@ export default function forumScreen() {
   return (
     <ScrollView style={styles.container}>
 
-      <ReviewCard 
-        reviewDate='June 15, 2024' 
-        reviewerName='Sebastian'  
-        rating={98}
-        reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
-        likes={22}
-        comments={3}
-      />
-      <ReviewCard 
-        reviewDate='June 15, 2024' 
-        reviewerName='Sebastian'  
-        rating={78}
-        reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
-        likes={11}
-        comments={33}
-      />
-      <ReviewCard 
-        reviewDate='June 15, 2024' 
-        reviewerName='Sebastian'  
-        rating={88}
-        reviewText='Professor Henry is very knowledgeable and makes the classes very interesting!'
-        likes={43}
-        comments={33}
-      />
+
     </ScrollView>
   );
 }

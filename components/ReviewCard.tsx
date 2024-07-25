@@ -9,25 +9,16 @@ interface ReviewCardProps {
   rating: number;
   reviewText: string;
   likes: number;
-  comments: number;
+  comments: any[];
+  feedback: number;
+  organization: number;
+  availability: number;
+  engagement: number;
+  grade: string;
 }
-const getLetterGrade = (percentage: number): string => {
-  if (percentage >= 97.5) return 'A+';
-  if (percentage >= 92.5) return 'A';
-  if (percentage >= 89.5) return 'A-';
-  if (percentage >= 86.5) return 'B+';
-  if (percentage >= 82.5) return 'B';
-  if (percentage >= 79.5) return 'B-';
-  if (percentage >= 76.5) return 'C+';
-  if (percentage >= 72.5) return 'C';
-  if (percentage >= 69.5) return 'C-';
-  if (percentage >= 66.5) return 'D+';
-  if (percentage >= 62.5) return 'D';
-  if (percentage >= 59.5) return 'D-';
-  return 'F';
-};
 
-const getLetterGradeColor = (rating: number): string => {
+
+const getGradeColor = (rating: number): string => {
     if (rating >= 90) return '#008000'; // dark green
     if (rating >= 70) return '#84EAB3'; // light green
     if (rating >= 60) return '#FFD700'; // Yellow
@@ -35,9 +26,8 @@ const getLetterGradeColor = (rating: number): string => {
     return '#FF0000'; //red
 };
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, rating, reviewText, likes, comments}) => {
-  const letterGrade = getLetterGrade(rating);
-  const letterGradeColor = getLetterGradeColor(rating);
+const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, rating, reviewText, likes, comments, feedback, organization, engagement, availability, grade }) => {
+  const gradeColor = getGradeColor(rating);
 
   return (
        <View style={styles.card}>
@@ -48,7 +38,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
 
       <View style={styles.ratingContainer}>
         <View style={[styles.ratingBox, { backgroundColor: '#333' }]}>
-          <Text style={[styles.ratingValue, { color: letterGradeColor }]}>{letterGrade}</Text>
+          <Text style={[styles.ratingValue, { color: gradeColor }]}>{rating}</Text>
         </View>
       </View>
       <Text style={styles.reviewText}>{reviewText}</Text>
@@ -59,7 +49,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
         </View>
         <View style={styles.iconContainer}>
           <Icon name="comment" size={20} color="#fff" />
-          <Text style={styles.iconText}>{comments}</Text>
+          <Text style={styles.iconText}>{comments?.length}</Text>
         </View>
       </View>
     </View>

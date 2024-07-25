@@ -12,9 +12,10 @@ import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCwN1ItpcYZpmW9ln0EYRwLObhyZNPSYks",
   authDomain: "pantherinsights-5fdb0.firebaseapp.com",
+  databaseURL: "https://xxxxx.firebaseio.com",
   projectId: "pantherinsights-5fdb0",
   storageBucket: "pantherinsights-5fdb0.appspot.com",
   messagingSenderId: "44004403854",
