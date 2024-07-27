@@ -1,53 +1,66 @@
-import React, { useState } from 'react';
-import { View, FlatList, Image, Dimensions, StyleSheet, ViewToken } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../app/responsiveScaling';
 
-const { width: screenWidth } = Dimensions.get('window');
-const ITEM_WIDTH = screenWidth / 3;
+type PropType = {
+  slides: string[];
+};
 
-interface CarouselProps {
-  images: string[];
-}
+const Carousel: React.FC<PropType> = ({ slides }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const flatListRef = useRef<FlatList>(null);
+  const { width: windowWidth } = Dimensions.get('window');
 
-const Carousel: React.FC<CarouselProps> = ({ images }) => {
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const scrollToIndex = (index: number) => {
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+    setSelectedIndex(index);
+  };
 
-  const onViewableItemsChanged = React.useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    if (viewableItems.length > 0) {
-      setCurrentIndex(viewableItems[0].index ?? 0);
-    }
-  }, []);
+  const onPrevButtonClick = () => {
+    const newIndex = selectedIndex > 0 ? selectedIndex - 1 : slides.length - 1;
+    scrollToIndex(newIndex);
+  };
 
-  const viewabilityConfig = {
-    viewAreaCoveragePercentThreshold: 50,
+  const onNextButtonClick = () => {
+    const newIndex = selectedIndex < slides.length - 1 ? selectedIndex + 1 : 0;
+    scrollToIndex(newIndex);
+  };
+
+  const onDotButtonClick = (index: number) => {
+    scrollToIndex(index);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.embla}>
       <FlatList
-        data={images}
+        ref={flatListRef}
+        data={slides}
         horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToAlignment="start"
-        snapToInterval={ITEM_WIDTH}
-        decelerationRate="fast"
-        keyExtractor={(item, index) => `${item}_${index}`}
+        pagingEnabled
+        onMomentumScrollEnd={(event) => {
+          const index = Math.floor(event.nativeEvent.contentOffset.x / windowWidth);
+          setSelectedIndex(index);
+        }}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Image source={{ uri: item }} style={styles.image} />
+          <View style={[styles.emblaSlide, { width: windowWidth }]}>
+            <Text style={styles.emblaSlideNumber}>{item + 1}</Text>
           </View>
         )}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
       />
-      <View style={styles.dotsContainer}>
-        {images.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              { opacity: index === currentIndex ? 1 : 0.3 }
-            ]}
-          />
+      <View style={styles.emblaControls}>
+        <TouchableOpacity onPress={onPrevButtonClick}>
+          <Text style={styles.controlText}>Prev</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onNextButtonClick}>
+          <Text style={styles.controlText}>Next</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.emblaDots}>
+        {slides.map((_, index) => (
+          <TouchableOpacity key={index} onPress={() => onDotButtonClick(index)}>
+            <Text style={styles.dot}>{index === selectedIndex ? '●' : '○'}</Text>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
@@ -55,32 +68,41 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  embla: {
     flex: 1,
     alignItems: 'center',
   },
-  item: {
-    width: ITEM_WIDTH,
-    paddingHorizontal: 5,
+  emblaSlide: {
     justifyContent: 'center',
     alignItems: 'center',
+    margin: scaleBoth(5),
+    backgroundColor: '#ddd',
+    height: scaleHeight(300),
+    width: scaleWidth(150),
   },
-  image: {
-    width: '100%',
-    height: 150,
-    resizeMode: 'cover',
-    borderRadius: 10,
+  emblaSlideNumber: {
+    fontSize: scaleFont(24),
   },
-  dotsContainer: {
+  emblaControls: {
     flexDirection: 'row',
-    marginTop: 10,
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: scaleBoth(10),
+  },
+  controlText: {
+    fontSize: scaleFont(18),
+    color: '#fff',
+  },
+  emblaDots: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: scaleBoth(10),
+    color: '#fff',
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#595959',
-    marginHorizontal: 4,
+    fontSize: scaleFont(24),
+    marginHorizontal: scaleWidth(5),
+    color: '#fff',
   },
 });
 

@@ -3,11 +3,15 @@ import { RouteProp } from '@react-navigation/native';
 
 export type RootStackParamList = {
   Login: undefined;
-  Home: undefined;
+  Register: undefined
+  Tabs: undefined
 };
 
 export type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
-export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+export type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Register'>;
+export type TabsScreenNavigationProp = StackNavigationProp<RootStackParamList, '(tabs)'>;
+
 
 export type LoginScreenRouteProp = RouteProp<RootStackParamList, 'Login'>;
-export type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+export type RegisterScreenRouteProp = RouteProp<RootStackParamList, 'Register'>;
+export type TabsScreenRouteProp = RouteProp<RootStackParamList, '(tabs) '>;
