@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, StatusBar, View, Image, Text, ImageBackground, Dimensions, Pressable, Platform} from 'react-native';
+import { SafeAreaView, StyleSheet, StatusBar, View, Image, Text, ImageBackground, Dimensions, Pressable, Platform, Alert} from 'react-native';
 import React from 'react';
 
 import Toolbar from '../../components/taskbar';
@@ -9,6 +9,8 @@ import ReviewCard from '@/components/ReviewCard';
 import Footer from '@/components/footer';
 import Carousel from '@/components/Carousel';
 import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScaling';
+import { auth } from '@/FirebaseConfig';
+import { firebase } from '@react-native-firebase/firestore';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -17,6 +19,46 @@ const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : StatusBar.currentHeight;
 export default function HomeScreen() {
   const [search, setSearch] = React.useState('');
 
+const updateLikes = async (professorName: string, reviewerName: string, action: string) => {
+  try {
+    // Reference to the reviews collection
+    const reviewsCollectionRef = firebase.firestore()
+      .collection('Professors')
+      .doc(professorName)
+      .collection('reviews');
+
+    // Query to find the specific review by reviewerName
+    const reviewsQuerySnapshot = await reviewsCollectionRef
+      .where('reviewerName', '==', reviewerName)
+      .limit(1) // Assuming each reviewer has only one review per professor
+      .get();
+
+    if (!reviewsQuerySnapshot.empty) {
+      const reviewDoc = reviewsQuerySnapshot.docs[0];
+      const currentLikes = reviewDoc.data().likes || 0;
+
+      // Determine the new likes count
+      let newLikes;
+      if (action === 'like') {
+        newLikes = currentLikes + 1;
+      } else if (action === 'dislike') {
+        newLikes = currentLikes - 1;
+      } else {
+        throw new Error('Invalid action');
+      }
+
+      // Update the review document with the new likes count
+      await reviewDoc.ref.update({ likes: newLikes });
+
+      Alert.alert('Likes updated successfully');
+    } else {
+      throw new Error('Review not found');
+    }
+  } catch (error) {
+    Alert.alert('Error updating likes');
+    console.error(error);
+  }
+};
 const images = [
   'https://via.placeholder.com/300', // Sample image URLs
   'https://via.placeholder.com/150',
@@ -87,6 +129,8 @@ style
         organization={5}
         availability={4}
         engagement={3}
+        updateLikes={updateLikes} 
+        professorName='Louis Henry'
       />
       <ReviewCard 
         reviewDate='June 15, 2024' 
@@ -100,6 +144,8 @@ style
         organization={5}
         availability={4}
         engagement={3}
+        updateLikes={updateLikes}
+        professorName='Louis Henry'
       />
       <ReviewCard 
         reviewDate='June 15, 2024' 
@@ -113,6 +159,8 @@ style
         organization={5}
         availability={4}
         engagement={3}
+        updateLikes={updateLikes}
+        professorName='Louis Henry'
       />
 
     <View style={styles.space1}></View>

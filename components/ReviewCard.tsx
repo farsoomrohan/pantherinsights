@@ -1,7 +1,8 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Alert, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../app/responsiveScaling';
+import { auth } from '@/FirebaseConfig';
 
 interface ReviewCardProps {
   reviewerName: string;
@@ -15,6 +16,8 @@ interface ReviewCardProps {
   availability: number;
   engagement: number;
   grade: string;
+  professorName: string;
+  updateLikes: (professorName: string, reviewerName: string, action: string) => Promise<any>;
 }
 
 
@@ -26,8 +29,22 @@ const getGradeColor = (rating: number): string => {
     return '#FF0000'; //red
 };
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, rating, reviewText, likes, comments, feedback, organization, engagement, availability, grade }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, rating, reviewText, likes, comments, feedback, organization, engagement, availability, grade, updateLikes, professorName   }) => {
   const gradeColor = getGradeColor(rating);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes);
+
+  const handleLikePress = async () => {
+    try {
+      const action = isLiked ? 'dislike' : 'like';
+      await updateLikes(professorName, reviewerName, action) // Replace 'professorName' with the actual professor name
+      setIsLiked(!isLiked);
+      setLikeCount(prevCount => (isLiked ? prevCount - 1 : prevCount + 1));
+    } catch (error) {
+      Alert.alert('Error updating likes');
+      console.error(error);
+    }
+  };
 
   return (
        <View style={styles.card}>
@@ -43,13 +60,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewerName, reviewDate, ratin
       </View>
       <Text style={styles.reviewText}>{reviewText}</Text>
          <View style={styles.footer}>
-        <View style={styles.iconContainer}>
-          <Icon name="heart" size={20} color="red" />
-          <Text style={styles.iconText}>{likes}</Text>
-        </View>
+          <Pressable style={styles.iconContainer} onPress={handleLikePress}>
+           <Icon name={isLiked ? 'heart' : 'heart-o'} size={20} color="red" />
+           <Text style={styles.iconText}>{likes}</Text>
+          </Pressable> 
         <View style={styles.iconContainer}>
           <Icon name="comment" size={20} color="#fff" />
-          <Text style={styles.iconText}>{comments?.length}</Text>
+          <Text style={styles.iconText}>{comments ? comments.length : 0}</Text>
         </View>
       </View>
     </View>

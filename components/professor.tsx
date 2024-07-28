@@ -6,6 +6,11 @@ import ReviewCard from '../components/ReviewCard';
 import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/firestore';
 import { auth }  from "@/FirebaseConfig";
+import Svg, { Path } from 'react-native-svg';
+import { BarChart } from 'react-native-gifted-charts';
+
+
+
 
 
 // Import other necessary components
@@ -15,10 +20,7 @@ interface ProfessorProps {
   professorName: string;
   professorEmail: string;
   professorImageUrl: string;
-  fetchProfessorData: (professorName: string) => Promise<any>;
-  fetchReviews: (professorName: string) => Promise<any>;
-  addRating: (ratingData: any) => Promise<any>;
-  updateLikes: (reviewId: string, action: string) => Promise<any>;
+
 }
 
 const Professor: React.FC<ProfessorProps> = ({
@@ -26,10 +28,7 @@ const Professor: React.FC<ProfessorProps> = ({
   professorName,
   professorEmail,
   professorImageUrl,
-  fetchProfessorData,
-  fetchReviews,
-  addRating,
-  updateLikes,
+
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedFeedback, setSelectedFeedback] = useState<number | null>(null);
@@ -52,6 +51,143 @@ const Professor: React.FC<ProfessorProps> = ({
   const [organization, setOrganization] = useState<number | null>(null);
   const [availability, setAvailability] = useState<number | null>(null);
   const [engagement, setEngagement] = useState<number | null>(null);
+  const [chartData, setChartData] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchReviews(professorName).then((data) => setReviews(data));
+    fetchChartData();
+  }, [professorName]);
+
+    const fetchProfessorData = async (professorId: string) => {
+    // Implement fetch logic
+  };
+
+  const fetchReviews = async (professorName: string) => {
+    // Implement fetch logic
+    try {
+    const reviewsSnapshot = await firebase.firestore()
+      .collection('Professors')
+      .doc(professorName)
+      .collection('reviews')
+      .orderBy('reviewDate', 'asc')
+      .get();
+    
+      if (reviewsSnapshot.empty) {
+      console.log('No matching documents.');
+      return [];
+    }
+    const reviewsData = reviewsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    return reviewsData;
+  } catch (error) {
+    console.log('Error fetching reviews:', error);
+    return [];
+  }
+  };
+
+  const addRating = async (ratingData: any) => {
+    // Implement add rating logic
+          try { 
+          await firebase.firestore().collection('Professors')
+          .doc(ratingData.professorName)
+          .collection('reviews')
+          .add({
+            feedback: ratingData.feedback,
+            organization: ratingData.organization,
+            availability: ratingData.availability,
+            grade: ratingData.grade,
+            engagement: ratingData.engagement,
+            rating: ratingData.rating,
+            reviewText: ratingData.reviewText,
+            reviewDate: ratingData.reviewDate,
+            reviewerName: ratingData.reviewerName,
+            professorName: ratingData.professorName,
+            likes: 0,
+            comments: [],
+          });
+          Alert.alert('Review submitted successfully');
+        }
+      catch (error) { 
+        Alert.alert('Registration Error'); console.log(error); 
+      } 
+  };
+
+const updateLikes = async (professorName: string, reviewerName: string, action: string) => {
+  try {
+    // Reference to the reviews collection
+    const reviewsCollectionRef = firebase.firestore()
+      .collection('Professors')
+      .doc(professorName)
+      .collection('reviews');
+
+    // Query to find the specific review by reviewerName
+    const reviewsQuerySnapshot = await reviewsCollectionRef
+      .where('reviewerName', '==', reviewerName)
+      .limit(1) // Assuming each reviewer has only one review per professor
+      .get();
+
+    if (!reviewsQuerySnapshot.empty) {
+      const reviewDoc = reviewsQuerySnapshot.docs[0];
+      const currentLikes = reviewDoc.data().likes || 0;
+
+      // Determine the new likes count
+      let newLikes;
+      if (action === 'like') {
+        newLikes = currentLikes + 1;
+      } else if (action === 'dislike') {
+        newLikes = currentLikes - 1;
+      } else {
+        throw new Error('Invalid action');
+      }
+
+      // Update the review document with the new likes count
+      await reviewDoc.ref.update({ likes: newLikes });
+
+    } else {
+      throw new Error('Review not found');
+    }
+  } catch (error) {
+    Alert.alert('Error updating likes');
+    console.error(error);
+  }
+};
+
+  const fetchChartData = async () => {
+    try {
+      const reviewsSnapshot = await firestore()
+        .collection('Professor')
+        .doc(professorName)
+        .collection('reviews')
+        .get();
+
+      const data = reviewsSnapshot.docs.map(doc => doc.data());
+      const aggregatedData = aggregateChartData(data);
+      setChartData(aggregatedData);
+    } catch (error) {
+      console.error('Error fetching chart data:', error);
+    }
+  };
+
+  const aggregateChartData = (data: any[]) => {
+    const totalReviews = data.length;
+    const sumData = data.reduce((acc, review) => {
+      acc.availability += review.availability || 0;
+      acc.engagement += review.engagement || 0;
+      acc.feedback += review.feedback || 0;
+      acc.organization += review.organization || 0;
+      return acc;
+    }, { availability: 0, engagement: 0, feedback: 0, organization: 0 });
+
+    return [
+      { category: 'Availability', value: sumData.availability / totalReviews },
+      { category: 'Engagement', value: sumData.engagement / totalReviews },
+      { category: 'Feedback', value: sumData.feedback / totalReviews },
+      { category: 'Organization', value: sumData.organization / totalReviews },
+    ];
+  };
+
   
 const getFormattedDate = () => {
   const now = new Date();
@@ -206,9 +342,9 @@ const handleSubmit = async () => {
 };
 
 
-  const handleLikeDislike = async (reviewId: string, action: string) => {
-    await updateLikes(reviewId, action);
-    fetchReviews(professorName).then((data) => setReviews(data));
+  const handleLikeDislike = async (professorName: string, reviewerName: string,  action: string) => {
+    await updateLikes(professorName, reviewerName, action);
+    await fetchReviews(professorName).then((data) => setReviews(data));
   };
 
   const calculateAverageRating = (reviews: any) => {
@@ -301,6 +437,7 @@ const handleSubmit = async () => {
   };
   
   const renderItem = ({ item }: { item: any }) => (
+    <View style={styles.container2}>
     <ReviewCard
       reviewerName={item.reviewerName}
       reviewDate={item.reviewDate}
@@ -313,8 +450,11 @@ const handleSubmit = async () => {
       organization={item.organization}
       engagement={item.engagement}
       grade={item.grade}
+      professorName={item.professorName}
+      updateLikes={handleLikeDislike}
     />
-  );
+    </View>
+ );
 
   return (
     <View style={styles.container}>
@@ -326,12 +466,15 @@ const handleSubmit = async () => {
               <View style={styles.ratingContainer}>
                 <Text style={styles.overallRatingText}>Overall Rating</Text>
                 <Text style={[styles.ratingValue, getGradeColor(overallGrade)]}>{overallGrade}</Text>
+
               </View>
             </View>
+            <BarChart data = {chartData}/>
+
             <View style={styles.reviewSection}>
               <Text style={styles.reviewTitle}>Student Reviews</Text>
               <TouchableOpacity style={styles.addReviewButton} onPress={openModal}>
-                <Text style={styles.addReviewButtonText}>Add New Review</Text>
+                <Text style={styles.addReviewButtonText}>Add New Review +</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -464,9 +607,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#282627',
     padding: scaleWidth(16),
   },
+  container2: {
+    flex: 1,
+  },
+ 
+
   header: {
     alignItems: 'center',
-    marginBottom: scaleHeight(20),
+    marginTop: scaleHeight(50),
     color: '#fff',
   },
   profContainer: {
@@ -475,11 +623,18 @@ const styles = StyleSheet.create({
   ratingContainer: {
     marginTop: scaleHeight(10),
     alignItems: 'center',
+    marginRight: scaleWidth(10)
   },
   overallRatingText: {
-    fontSize: scaleFont(18),
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: scaleFont(24),
+    lineHeight: scaleHeight(30),
+    fontWeight: "700",
+    fontFamily: "Roboto-Bold",
+    color: "#fff",
+    textAlign: "center",
+    width: scaleWidth(200),
+    height: scaleHeight(30),
+
   },
   ratingValue: {
     fontSize: scaleFont(32),
@@ -493,15 +648,22 @@ const styles = StyleSheet.create({
     marginBottom: scaleHeight(10),
   },
   reviewTitle: {
-    fontSize: scaleFont(20),
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: scaleFont(24),
+    lineHeight: scaleHeight(30),
+    fontWeight: "700",
+    fontFamily: "Roboto-Bold",
+    color: "#fff",
+    textAlign: "center",
+    width: scaleWidth(200),
+    height: scaleHeight(30),
+    marginRight: scaleWidth(25),
   },
   addReviewButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#2563EB',
     paddingVertical: scaleHeight(8),
-    paddingHorizontal: scaleWidth(16),
+    paddingHorizontal: scaleWidth(6),
     borderRadius: scaleWidth(5),
+    marginRight: scaleWidth(10),
   },
   addReviewButtonText: {
     color: '#fff',
@@ -677,6 +839,13 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingBottom: scaleHeight(100),
+  },
+  chartContainer: {
+    alignItems: 'center',
+    marginVertical: scaleHeight(20),
+    backgroundColor: '#333', // Dark background for the chart
+    borderRadius: scaleWidth(8),
+    padding: scaleWidth(10),
   },
 });
 

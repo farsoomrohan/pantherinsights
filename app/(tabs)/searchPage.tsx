@@ -5,75 +5,52 @@ import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScali
 import Professor from '@/components/professor';
 import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/firestore';
+import React, { useState, useEffect } from 'react';
 
+type Professor = {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+};
 
 export default function searchScreen() {
-    const fetchProfessorData = async (professorId: string) => {
-    // Implement fetch logic
-  };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [professors, setProfessors] = useState<Professor[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const fetchReviews = async (professorName: string) => {
-    // Implement fetch logic
-    try {
-    const reviewsSnapshot = await firebase.firestore()
-      .collection('Professors')
-      .doc(professorName)
-      .collection('reviews')
-      .orderBy('reviewDate', 'asc')
+const fetchProfessors = async (query: string) => {
+  setLoading(true);
+  try {
+    const snapshot = await firebase.firestore()
+      .collection('professors')
+      .where('name', '>=', query)
+      .where('name', '<=', query + '\uf8ff')
       .get();
-    
-      if (reviewsSnapshot.empty) {
-      console.log('No matching documents.');
-      return [];
-    }
-    const reviewsData = reviewsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    return reviewsData;
+
+    const professorsList: Professor[] = snapshot.docs.map(doc => {
+      const data = doc.data() as Professor;
+      return {
+        ...data,
+        id: doc.id
+      };
+    });
+
+    setProfessors(professorsList);
   } catch (error) {
-    console.log('Error fetching reviews:', error);
-    return [];
+    console.error("Error fetching professors: ", error);
+  } finally {
+    setLoading(false);
   }
-  };
-
-  const addRating = async (ratingData: any) => {
-    // Implement add rating logic
-          try { 
-          await firebase.firestore().collection('Professors')
-          .doc(ratingData.professorName)
-          .collection('reviews')
-          .add({
-            feedback: ratingData.feedback,
-            organization: ratingData.organization,
-            availability: ratingData.availability,
-            grade: ratingData.grade,
-            engagement: ratingData.engagement,
-            rating: ratingData.rating,
-            reviewText: ratingData.reviewText,
-            reviewDate: ratingData.reviewDate,
-            reviewerName: ratingData.reviewerName,
-          });
-          Alert.alert('Review submitted successfully');
-        }
-      catch (error) { 
-        Alert.alert('Registration Error'); console.log(error); 
-      } 
-  };
-
-  const updateLikes = async (reviewId: string, action: string) => {
-    // Implement update likes logic
-  };
+};
+  
   return (
       <Professor 
         professorId={'010203'}
         professorName={'Louis Henry'}
         professorEmail={'henry@gmail.com'}
         professorImageUrl={'https://cas.gsu.edu/files/2019/08/henry.jpg'}
-        fetchProfessorData={fetchProfessorData}
-        fetchReviews={fetchReviews}
-        addRating={addRating}
-        updateLikes={updateLikes} 
+        
       />
    
   );

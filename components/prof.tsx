@@ -1,3 +1,4 @@
+import { scaleBoth, scaleFont, scaleHeight, scaleWidth } from '@/app/responsiveScaling';
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
@@ -22,20 +23,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  image: {
-    width: '40%', // Adjust based on your requirement
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+  image: { 
+    width: scaleWidth(100),
+    height: scaleHeight(100),
+    borderRadius: scaleBoth(20),
   },
   name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 5,
+    fontSize: scaleFont(24),
+    lineHeight: scaleHeight(30),
+    fontWeight: "700",
+    fontFamily: "Roboto-Bold",
+    color: "#fff",
+    textAlign: "center",
+    width: scaleWidth(200),
+    height: scaleHeight(35), 
   },
   email: {
-    color: 'gray',
+    color: '#2563EB',
     textAlign: 'center',
   },
 });
