@@ -1,4 +1,3 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, ScrollView, Image, Platform } from 'react-native';
 import ReviewCard from '@/components/ReviewCard';
 import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScaling';

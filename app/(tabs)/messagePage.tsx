@@ -1,4 +1,3 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, ScrollView, Image, Platform, View, Pressable, Text} from 'react-native';
 import ReviewCard from '@/components/ReviewCard';
 import Message from '@/components/message';

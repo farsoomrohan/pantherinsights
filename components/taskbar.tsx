@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: '#2563EB', // White text color
+    color: '#2563EB', // 
     fontSize: scaleFont(13),
     fontWeight: 'bold',
   },

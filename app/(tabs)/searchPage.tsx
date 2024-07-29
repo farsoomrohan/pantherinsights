@@ -1,4 +1,3 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, ScrollView, Image, Platform, Alert } from 'react-native';
 import ReviewCard from '@/components/ReviewCard';
 import { scaleWidth, scaleHeight, scaleFont, scaleBoth} from '../responsiveScaling';
@@ -48,7 +47,7 @@ const fetchProfessors = async (query: string) => {
       <Professor 
         professorId={'010203'}
         professorName={'Louis Henry'}
-        professorEmail={'henry@gmail.com'}
+        professorEmail={'lhenry23@gsu.edu'}
         professorImageUrl={'https://cas.gsu.edu/files/2019/08/henry.jpg'}
         
       />

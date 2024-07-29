@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet, FlatList, Alert } from 'react-native';
-import { scaleWidth, scaleHeight, scaleFont } from '../app/responsiveScaling'; // Import your scaling functions
+import { scaleWidth, scaleHeight, scaleFont, scaleBoth } from '../app/responsiveScaling'; // Import your scaling functions
 import Prof from '../components/prof';
 import ReviewCard from '../components/ReviewCard';
 import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/firestore';
 import { auth }  from "@/FirebaseConfig";
 import Svg, { Path } from 'react-native-svg';
-import { BarChart } from 'react-native-gifted-charts';
+import { BarChart } from 'react-native-gifted-charts';  // using gifted-chart for bar chart
 
 
 
 
 
-// Import other necessary components
+// Professor page component loads page based on props passed by search page
 
 interface ProfessorProps {
   professorId: string;
@@ -154,10 +154,10 @@ const updateLikes = async (professorName: string, reviewerName: string, action: 
   }
 };
 
-  const fetchChartData = async () => {
+const fetchChartData = async () => {
     try {
-      const reviewsSnapshot = await firestore()
-        .collection('Professor')
+      const reviewsSnapshot = await firebase.firestore()
+        .collection('Professors')
         .doc(professorName)
         .collection('reviews')
         .get();
@@ -169,26 +169,33 @@ const updateLikes = async (professorName: string, reviewerName: string, action: 
       console.error('Error fetching chart data:', error);
     }
   };
+// function that formats and computes average of each category currently not working
+// console.log shows [aggregateError]
+// will need to modify or use new approach 
+ 
+const aggregateChartData = (data: any[]) => {
+  const totalReviews = data.length;
+  const sumData = data.reduce((acc, review) => {
+    acc.availability += Number(review.availability) || 0;
+    acc.engagement += Number(review.engagement) || 0;
+    acc.feedback += Number(review.feedback) || 0;
+    acc.organization += Number(review.organization) || 0;
+    return acc;
+  }, { availability: 0, engagement: 0, feedback: 0, organization: 0 });
 
-  const aggregateChartData = (data: any[]) => {
-    const totalReviews = data.length;
-    const sumData = data.reduce((acc, review) => {
-      acc.availability += review.availability || 0;
-      acc.engagement += review.engagement || 0;
-      acc.feedback += review.feedback || 0;
-      acc.organization += review.organization || 0;
-      return acc;
-    }, { availability: 0, engagement: 0, feedback: 0, organization: 0 });
-
-    return [
-      { category: 'Availability', value: sumData.availability / totalReviews },
-      { category: 'Engagement', value: sumData.engagement / totalReviews },
-      { category: 'Feedback', value: sumData.feedback / totalReviews },
-      { category: 'Organization', value: sumData.organization / totalReviews },
-    ];
+  const calculateAverage = (sum: number) => {
+    const average = sum / totalReviews;
+    return isNaN(average) || !isFinite(average) ? 0 : Number(average.toFixed(2));
   };
 
-  
+  return [
+    { value: calculateAverage(sumData.organization), label: 'Organization', frontColor: '#177AD5'},
+    { value: calculateAverage(sumData.feedback), label: 'Feedback', frontColor: '#177AD5'},
+    { value: calculateAverage(sumData.availability), label: 'Availability', frontColor: '#177AD5'},
+    { value: calculateAverage(sumData.engagement), label: 'Engagement', frontColor: '#177AD5'},
+  ];
+};
+
 const getFormattedDate = () => {
   const now = new Date();
   const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
@@ -335,9 +342,10 @@ const handleSubmit = async () => {
     closeModal();
     const fetchedReviews = await fetchReviews(professorName);
     setReviews(fetchedReviews);
+    await fetchChartData();
   } catch (error) {
     console.error('Error adding rating:', error);
-    Alert.alert('Error', 'There was an error adding your rating. Please try again.');
+    Alert.alert('Error', 'There was an error adding your rating. Please try again');
   }
 };
 
@@ -469,8 +477,29 @@ const handleSubmit = async () => {
 
               </View>
             </View>
-            <BarChart data = {chartData}/>
-
+            <View style={styles.space2}></View>
+            <Text style ={styles.overallRatingText}>The Insights ...</Text>
+            <View style={styles.space2}></View>
+            <BarChart
+              frontColor="lightgray"
+              data={chartData}
+              yAxisThickness={0}
+              xAxisThickness={0}
+              barBorderRadius={4}
+              hideRules
+              isAnimated
+              barWidth={scaleHeight(65)}
+              showGradient
+              maxValue={5}
+              stepValue={1}
+              backgroundColor={'#202020'}
+              disablePress
+              yAxisColor={'gray'}
+              xAxisColor={'gray'}
+              yAxisTextStyle={{color: '#fff'}}
+              xAxisLabelTextStyle={ {color: '#fff'}}
+            />
+            <View style={styles.space}></View>
             <View style={styles.reviewSection}>
               <Text style={styles.reviewTitle}>Student Reviews</Text>
               <TouchableOpacity style={styles.addReviewButton} onPress={openModal}>
@@ -605,12 +634,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#282627',
-    padding: scaleWidth(16),
   },
   container2: {
     flex: 1,
   },
- 
+  space: {
+    height: scaleHeight(50),
+  },
+ space2: {
+    height: scaleHeight(25),
+  },
+
 
   header: {
     alignItems: 'center',
@@ -623,7 +657,13 @@ const styles = StyleSheet.create({
   ratingContainer: {
     marginTop: scaleHeight(10),
     alignItems: 'center',
-    marginRight: scaleWidth(10)
+    marginRight: scaleWidth(25),
+    backgroundColor: '#202020',
+    height: scaleHeight(150),
+    paddingTop: scaleHeight(5),
+    borderRadius: scaleBoth(2),
+    borderColor: '#fff',
+    borderWidth: scaleBoth(2),
   },
   overallRatingText: {
     fontSize: scaleFont(24),
@@ -637,9 +677,9 @@ const styles = StyleSheet.create({
 
   },
   ratingValue: {
-    fontSize: scaleFont(32),
-    fontWeight: 'bold',
-    marginTop: scaleHeight(5),
+    fontSize: scaleFont(72),
+    fontFamily: 'Inter-Medium',
+    textAlign: "left",
   },
   reviewSection: {
     flexDirection: 'row',
@@ -673,7 +713,6 @@ const styles = StyleSheet.create({
   reviewCard: {
     backgroundColor: '#fff',
     borderRadius: scaleWidth(8),
-    padding: scaleWidth(10),
     marginBottom: scaleHeight(10),
     flexDirection: 'row',
     elevation: scaleWidth(3),
@@ -842,10 +881,8 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     alignItems: 'center',
-    marginVertical: scaleHeight(20),
-    backgroundColor: '#333', // Dark background for the chart
-    borderRadius: scaleWidth(8),
-    padding: scaleWidth(10),
+    marginBottom: scaleHeight(20),
+    backgroundColor: '#202020', // Dark background for the chart
   },
 });
 
